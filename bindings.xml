@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+// Copyright (C) 2021 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
+-->
+<typesystem package="LimeReport6">
+    <load-typesystem name="typesystem_widgets.xml" generate="no"/>
+    <load-typesystem name="typesystem_qml.xml" generate="no"/>
+    <load-typesystem name="typesystem_printsupport_common.xml" generate="no"/>
+    <namespace-type name="LimeReport" visible="false">
+        <enum-type name="ExpandType" />
+        <enum-type name="RenderPass" />
+        <enum-type name="ArrangeType" />
+        <enum-type name="ScaleType" />
+        <enum-type name="PreviewHint" flags="PreviewHints" />
+        <object-type name="Enums">
+            <enum-type name="VariableDataType" />
+        </object-type>
+        <object-type name="ReportEngine" />
+        <object-type name="IDataSource">
+            <enum-type name="DatasourceMode" />
+        </object-type>
+        <object-type name="IDataSourceHolder" force-abstract="yes" />
+        <object-type name="IDataSourceManager" force-abstract="yes" />
+        <object-type name="IDbCredentialsProvider" />
+        <object-type name="ICallbackDatasource" />
+    </namespace-type>
+</typesystem>

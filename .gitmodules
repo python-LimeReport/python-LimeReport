@@ -1,0 +1,3 @@
+[submodule "LimeReport"]
+	path = LimeReport
+	url = https://github.com/fralx/LimeReport
