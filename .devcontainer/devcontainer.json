@@ -1,0 +1,12 @@
+{
+  "name": "python-LimeReport Dev Container",
+  "image": "ghcr.io/maks1ms/devcontainer-python-limereport:Qt-6.3.2-Python-3.9",
+  "customizations": {
+    "vscode": {
+      "extensions": [],
+      "settings": {
+        "cmake.configureOnOpen": false
+      }
+    }
+  }
+}

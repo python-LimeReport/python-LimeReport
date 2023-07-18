@@ -8,12 +8,19 @@ endif()
 project(LimeReport6)
 
 set(USE_QT6 ON)
+
+if (NOT DEFINED PYSIDE_INSTALL_DIR)
+    set(PYSIDE_INSTALL_DIR $ENV{PYSIDE_INSTALL_DIR})
+endif()
+
+list(APPEND CMAKE_PREFIX_PATH ${PYSIDE_INSTALL_DIR})
+
 find_package(QT REQUIRED NAMES Qt6)
 find_package(
   Qt${QT_VERSION_MAJOR}
   COMPONENTS Core Widgets Sql Network Xml Svg Qml PrintSupport REQUIRED
 )
-# find_package(PythonLibs REQUIRED)
+
 find_package(Shiboken6 REQUIRED)
 find_package(PySide6 REQUIRED)
 
@@ -24,20 +31,20 @@ get_target_property(PYSIDE_INCLUDE_DIRS PySide6::pyside6 INTERFACE_INCLUDE_DIREC
 
 add_subdirectory(LimeReport)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 set(wrapped_header ${CMAKE_SOURCE_DIR}/bindings.h)
 set(typesystem_file ${CMAKE_SOURCE_DIR}/bindings.xml)
 
 set(generated_sources
-  limereport_idatasourceholder_wrapper.cpp
   limereport6_module_wrapper.cpp
-  limereport_icallbackdatasource_wrapper.cpp
   limereport_enums_wrapper.cpp
-  limereport_idbcredentialsprovider_wrapper.cpp
   limereport_reportengine_wrapper.cpp
+  limereport_icallbackdatasource_wrapper.cpp
   limereport_idatasource_wrapper.cpp
+  limereport_idatasourceholder_wrapper.cpp
   limereport_idatasourcemanager_wrapper.cpp
+  limereport_idbcredentialsprovider_wrapper.cpp
 )
 
 list(TRANSFORM generated_sources PREPEND ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/)
@@ -55,20 +62,13 @@ list(TRANSFORM SHIBOKEN_INCLUDES PREPEND "-I")
 
 set(SHIBOKEN_TYPESYSTEMS
   ${CMAKE_SOURCE_DIR}
-  /usr/share/PySide6/typesystems
+  ${PYSIDE_TYPESYSTEMS}
 )
 list(REMOVE_DUPLICATES SHIBOKEN_TYPESYSTEMS)
 list(TRANSFORM SHIBOKEN_TYPESYSTEMS PREPEND "-T")
 
-# Qt6PrintSupport_DEFINITIONS
-# ===============
 
-set(shiboken_generator_path "/usr/bin")
-
-set(shiboken_path "${shiboken_generator_path}/shiboken6${CMAKE_EXECUTABLE_SUFFIX}")
-if(NOT EXISTS ${shiboken_path})
-  message(FATAL_ERROR "Shiboken executable not found at path: ${shiboken_path}")
-endif()
+set(shiboken_path "${PYSIDE_INSTALL_DIR}/bin/shiboken6")
 
 set(shiboken_options 
   --generator-set=shiboken 
@@ -120,3 +120,8 @@ foreach(_dir IN LISTS PYSIDE_INCLUDE_DIRS)
   target_include_directories(${PROJECT_NAME} PRIVATE ${_dir}/QtNetwork)
   target_include_directories(${PROJECT_NAME} PRIVATE ${_dir}/QtPrintSupport)
 endforeach()
+
+# TODO:
+target_include_directories(${PROJECT_NAME} PRIVATE /home/vscode/pyside-setup/sources/pyside6/PySide6)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH "$ORIGIN/")
