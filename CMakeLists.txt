@@ -7,7 +7,9 @@ endif()
 
 project(LimeReport6)
 
+# LimeReport options
 set(USE_QT6 ON)
+set(ENABLE_ZINT ON)
 
 if (NOT DEFINED PYSIDE_INSTALL_DIR)
     set(PYSIDE_INSTALL_DIR $ENV{PYSIDE_INSTALL_DIR})
