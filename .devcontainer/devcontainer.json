@@ -4,9 +4,9 @@
   "customizations": {
     "vscode": {
       "extensions": [
-		"ms-python.python",
-		"ms-python.autopep8"
-	],
+        "ms-python.python",
+        "ms-python.autopep8"
+      ],
       "settings": {
         "cmake.configureOnOpen": false,
         "[python]": {
