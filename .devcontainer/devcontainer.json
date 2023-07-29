@@ -1,6 +1,8 @@
 {
   "name": "python-LimeReport Dev Container",
   "image": "ghcr.io/python-limereport/devcontainer:Qt-6.4.2-Python-3.9",
+  "runArgs": ["--env-file",".devcontainer/.env"],
+  "postStartCommand": "sudo bash -c 'ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone'",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -8,10 +10,7 @@
         "ms-python.autopep8"
       ],
       "settings": {
-        "cmake.configureOnOpen": false,
-        "[python]": {
-          "editor.defaultFormatter": "ms-python.autopep8"
-        },
+        "cmake.configureOnOpen": false
       }
     }
   }
