@@ -3,9 +3,15 @@
   "image": "ghcr.io/python-limereport/devcontainer:Qt-6.4.2-Python-3.9",
   "customizations": {
     "vscode": {
-      "extensions": [],
+      "extensions": [
+		"ms-python.python",
+		"ms-python.autopep8"
+	],
       "settings": {
-        "cmake.configureOnOpen": false
+        "cmake.configureOnOpen": false,
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.autopep8"
+        },
       }
     }
   }

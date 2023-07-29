@@ -9,7 +9,9 @@ project(LimeReport6)
 
 # LimeReport options
 set(USE_QT6 ON)
-set(ENABLE_ZINT ON)
+set(ENABLE_ZINT OFF)
+#
+set(LIMEREPORT_STATIC ON)
 
 if (NOT DEFINED PYSIDE_INSTALL_DIR)
     set(PYSIDE_INSTALL_DIR $ENV{PYSIDE_INSTALL_DIR})
@@ -126,4 +128,13 @@ endforeach()
 # TODO:
 target_include_directories(${PROJECT_NAME} PRIVATE /home/vscode/pyside-setup/sources/pyside6/PySide6)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH "$ORIGIN/")
+set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH "$ORIGIN/:$ORIGIN/PySide6/:$ORIGIN/shiboken6/")
+
+
+# ===============
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${PYTHON_EXECUTABLE}
+                    ${CMAKE_SOURCE_DIR}/build_scripts/pyi_generator.py
+                    $<TARGET_FILE:${PROJECT_NAME}>
+                    COMMENT "Running pyi_generator")
