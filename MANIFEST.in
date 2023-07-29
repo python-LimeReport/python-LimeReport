@@ -1,0 +1,4 @@
+graft LimeReport
+include CMakeLists.txt bindings.*
+include COPYING.*
+include README.md
