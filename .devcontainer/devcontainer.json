@@ -1,6 +1,6 @@
 {
   "name": "python-LimeReport Dev Container",
-  "image": "ghcr.io/python-LimeReport/devcontainer:Qt-6.4.2-Python-3.9",
+  "image": "ghcr.io/python-limereport/devcontainer:Qt-6.4.2-Python-3.9",
   "customizations": {
     "vscode": {
       "extensions": [],
