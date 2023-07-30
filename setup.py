@@ -37,9 +37,15 @@ import platform
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
+from wheel.bdist_wheel import bdist_wheel
+
+import shiboken6
 
 USE_ZINT_ENV_KEY = 'LIMEREPORT_USE_ZINT'
 USE_ZINT = os.environ.get(USE_ZINT_ENV_KEY, False)
+
+USE_LIMITED_API_ENV_KEY = 'LIMEREPORT_USE_LIMITED_API'
+USE_LIMITED_API = os.environ.get(USE_LIMITED_API_ENV_KEY, True)
 
 def qt_version_tuple():
     proc = subprocess.Popen(['qmake', '-query', 'QT_VERSION'], stdout=subprocess.PIPE)
@@ -176,7 +182,16 @@ class BuildExt(build_ext):
         subprocess.run(
             ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
         )
-        
+
+class BDistWheel(bdist_wheel):
+    def finalize_options(self):
+
+        if USE_LIMITED_API:
+            [s_major, s_minor] = shiboken6.__minimum_python_version__
+            self.py_limited_api = f"cp{s_major}{s_minor}"
+
+        return super().finalize_options()
+
 setup(
     name=get_name(),
     license = get_license(),
@@ -184,12 +199,12 @@ setup(
     license_files = get_license_files(),
     ext_modules=[
         CMakeExtension(
-            f"LimeReport{qt_major}",
-            py_limited_api=True
+            f"LimeReport{qt_major}"
         )
     ],
     cmdclass={
         "build_ext": BuildExt,
+        "bdist_wheel": BDistWheel,
     },
     install_requires=[
         f"PySide{pyside_version}"
