@@ -4,6 +4,9 @@ Python bindings for [LimeReport](https://github.com/fralx/LimeReport)
 
 ## Build
 
+0. Setup devcontainer.
+1.
+
 Default:
 
 ```
