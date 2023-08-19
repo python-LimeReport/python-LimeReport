@@ -23,7 +23,7 @@ jobs:
       - name: Build sdist
         run: pipx run build --sdist
         env:
-          LIMEREPORT_USE_ZINT=${{ matrix.zint }}
+          LIMEREPORT_USE_ZINT: ${{ matrix.zint }}
 
       - uses: actions/upload-artifact@v3
         with:
@@ -50,10 +50,10 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-6.4.2
 
           CIBW_ENVIRONMENT: >
-            CMAKE_BUILD_PARALLEL_LEVEL = "$(nproc)"
-            CMAKE_ARGS = "-DPython3_EXECUTABLE=$(which python) -DLIBSHIBOKEN_INCLUDE_DIRS=/usr/local/include/shiboken6 -DPYSIDE_INSTALL_DIR=/usr/local"
-            PIP_EXTRA_INDEX_URL = "https://python-limereport.github.io/pypi/"
-            LIMEREPORT_USE_ZINT=${{ matrix.zint }}
+            CMAKE_BUILD_PARALLEL_LEVEL="$(nproc)"
+            CMAKE_ARGS="-DPython3_EXECUTABLE=$(which python) -DLIBSHIBOKEN_INCLUDE_DIRS=/usr/local/include/shiboken6 -DPYSIDE_INSTALL_DIR=/usr/local"
+            PIP_EXTRA_INDEX_URL="https://python-limereport.github.io/pypi/"
+            LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
 
       - uses: actions/upload-artifact@v3
         with:
