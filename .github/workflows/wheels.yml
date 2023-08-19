@@ -22,7 +22,7 @@ jobs:
         env:
           CIBW_BUILD: "cp39-manylinux*"
           CIBW_ARCHS_LINUX: "x86_64"
-          CIBW_MANYLINUX_X86_64_IMAGE: quay.io/pypa/manylinux_2_28_x86_64
+          CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-6.4.2
           # CIBW_ENVIRONMENT_ALL: "QT_VERSION=6.4.2 AQTINSTALL_VERSION=3.1.6"
 
       - uses: actions/upload-artifact@v3
