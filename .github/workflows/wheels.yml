@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-6.4.2
+    strategy:
+      matrix:
+        zint: [TRUE, FALSE]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -19,6 +22,8 @@ jobs:
 
       - name: Build sdist
         run: pipx run build --sdist
+        env:
+          LIMEREPORT_USE_ZINT=${{ matrix.zint }}
 
       - uses: actions/upload-artifact@v3
         with:
