@@ -10,8 +10,12 @@ jobs:
   build_sdist:
     name: Build source distribution
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-6.4.2
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Build sdist
         run: pipx run build --sdist
