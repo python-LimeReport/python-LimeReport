@@ -42,10 +42,10 @@ from wheel.bdist_wheel import bdist_wheel
 import shiboken6
 
 USE_ZINT_ENV_KEY = 'LIMEREPORT_USE_ZINT'
-USE_ZINT = os.environ.get(USE_ZINT_ENV_KEY, False)
+USE_ZINT = os.environ.get(USE_ZINT_ENV_KEY, 'False').lower() in ('true', '1', 't')
 
 USE_LIMITED_API_ENV_KEY = 'LIMEREPORT_USE_LIMITED_API'
-USE_LIMITED_API = os.environ.get(USE_LIMITED_API_ENV_KEY, True)
+USE_LIMITED_API = os.environ.get(USE_LIMITED_API_ENV_KEY, 'True').lower() in ('true', '1', 't')
 
 def qt_version_tuple():
     proc = subprocess.Popen(['qmake', '-query', 'QT_VERSION'], stdout=subprocess.PIPE)
