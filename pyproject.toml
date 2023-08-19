@@ -3,6 +3,7 @@ requires = [
     "cmake>=3.18",
     "setuptools>=42",
     "wheel",
+    "shiboken6",
 ]
 
 build-backend = "setuptools.build_meta"

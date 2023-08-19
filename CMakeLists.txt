@@ -26,19 +26,26 @@ find_package(
 )
 
 if (NOT DEFINED LIBSHIBOKEN_INCLUDE_DIRS)
-    set(LIBSHIBOKEN_INCLUDE_DIRS $ENV{LIBSHIBOKEN_INCLUDE_DIRS})
+  set(LIBSHIBOKEN_INCLUDE_DIRS $ENV{LIBSHIBOKEN_INCLUDE_DIRS})
 endif()
 
-set(SHIBOKEN_LIBRARY "libshiboken")
+if (NOT DEFINED LIBSHIBOKEN_LIBRARY)
+  set(LIBSHIBOKEN_LIBRARY $ENV{LIBSHIBOKEN_LIBRARY})
+endif()
 
 if (NOT DEFINED LIBSHIBOKEN_INCLUDE_DIRS)
   find_package(Shiboken6 REQUIRED)
   get_target_property(LIBSHIBOKEN_INCLUDE_DIRS Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
-  set(SHIBOKEN_LIBRARY "Shiboken6::libshiboken")
+  set(LIBSHIBOKEN_LIBRARY "Shiboken6::libshiboken")
 else()
-  find_package(Python3 COMPONENTS Interpreter Development.Module REQIRED)
+  find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED)
 
-  set(PYTHON_INCLUDE_DIRS Python3_INCLUDE_DIRS)
+  set(PYTHON_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
+  set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
+endif()
+
+if (NOT DEFINED LIBSHIBOKEN_LIBRARY)
+  set(LIBSHIBOKEN_LIBRARY "shiboken6.abi3")
 endif()
 
 if (NOT DEFINED PYSIDE_INCLUDE_DIRS)
@@ -125,7 +132,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} 
-  SHIBOKEN_LIBRARY
+  ${LIBSHIBOKEN_LIBRARY}
   PySide6::pyside6
 )
 
@@ -141,9 +148,6 @@ foreach(_dir IN LISTS PYSIDE_INCLUDE_DIRS)
   target_include_directories(${PROJECT_NAME} PRIVATE ${_dir}/QtNetwork)
   target_include_directories(${PROJECT_NAME} PRIVATE ${_dir}/QtPrintSupport)
 endforeach()
-
-# TODO:
-target_include_directories(${PROJECT_NAME} PRIVATE /home/vscode/pyside-setup/sources/pyside6/PySide6)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH "$ORIGIN/:$ORIGIN/PySide6/:$ORIGIN/shiboken6/")
 
