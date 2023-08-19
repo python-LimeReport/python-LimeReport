@@ -25,13 +25,26 @@ find_package(
   COMPONENTS Core Widgets Sql Network Xml Svg Qml PrintSupport REQUIRED
 )
 
-find_package(Shiboken6 REQUIRED)
-find_package(PySide6 REQUIRED)
+if (NOT DEFINED LIBSHIBOKEN_INCLUDE_DIRS)
+    set(LIBSHIBOKEN_INCLUDE_DIRS $ENV{LIBSHIBOKEN_INCLUDE_DIRS})
+endif()
 
+set(SHIBOKEN_LIBRARY "libshiboken")
 
-get_target_property(LIBSHIBOKEN_INCLUDE_DIRS Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
-get_target_property(PYSIDE_INCLUDE_DIRS PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
-# find_package(PySide6 REQUIRED)
+if (NOT DEFINED LIBSHIBOKEN_INCLUDE_DIRS)
+  find_package(Shiboken6 REQUIRED)
+  get_target_property(LIBSHIBOKEN_INCLUDE_DIRS Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
+  set(SHIBOKEN_LIBRARY "Shiboken6::libshiboken")
+endif()
+
+if (NOT DEFINED PYSIDE_INCLUDE_DIRS)
+    set(PYSIDE_INCLUDE_DIRS $ENV{PYSIDE_INCLUDE_DIRS})
+endif()
+
+if (NOT DEFINED PYSIDE_INCLUDE_DIRS)
+  find_package(PySide6 REQUIRED)
+  get_target_property(PYSIDE_INCLUDE_DIRS PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
+endif()
 
 add_subdirectory(LimeReport)
 
@@ -108,7 +121,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} 
-  Shiboken6::libshiboken
+  SHIBOKEN_LIBRARY
   PySide6::pyside6
 )
 
