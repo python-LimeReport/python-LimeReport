@@ -7,7 +7,3 @@ echo "Python version: $PYTHON_VERSION"
 echo "Python platform: $PYTHON_PLATFORM"
 
 curl -sL https://github.com/python-LimeReport/pyside6/releases/download/py${PYTHON_VERSION}-qt${QT_VERSION}/extra-$PYTHON_PLATFORM.tar.gz | tar -h -zx -C /usr/local
-
-export PYSIDE_INSTALL_DIR=/usr/local
-echo "export PYSIDE_INSTALL_DIR=/usr/local" > /etc/profile.d/pyside-install-dir.sh
-echo "export PYSIDE_INSTALL_DIR=/usr/local" >> /etc/environment
