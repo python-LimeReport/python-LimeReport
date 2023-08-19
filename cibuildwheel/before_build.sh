@@ -10,3 +10,4 @@ curl -sL https://github.com/python-LimeReport/pyside6/releases/download/py${PYTH
 
 export PYSIDE_INSTALL_DIR=/usr/local
 echo "export PYSIDE_INSTALL_DIR=/usr/local" > /etc/profile.d/pyside-install-dir.sh
+echo "export PYSIDE_INSTALL_DIR=/usr/local" >> /etc/environment
