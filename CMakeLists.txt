@@ -35,6 +35,10 @@ if (NOT DEFINED LIBSHIBOKEN_INCLUDE_DIRS)
   find_package(Shiboken6 REQUIRED)
   get_target_property(LIBSHIBOKEN_INCLUDE_DIRS Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
   set(SHIBOKEN_LIBRARY "Shiboken6::libshiboken")
+else()
+  find_package(Python3 COMPONENTS Interpreter Development.Module REQIRED)
+
+  set(PYTHON_INCLUDE_DIRS Python3_INCLUDE_DIRS)
 endif()
 
 if (NOT DEFINED PYSIDE_INCLUDE_DIRS)
