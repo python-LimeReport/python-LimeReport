@@ -12,3 +12,10 @@ build-backend = "setuptools.build_meta"
 [tool.cibuildwheel]
 before-all = "cibuildwheel/before_all.sh"
 build-verbosity = 1
+
+[tool.cibuildwheel.linux]
+environment = {
+    CMAKE_BUILD_PARALLEL_LEVEL: "$(nproc)",
+    CMAKE_ARGS: "-DPython3_EXECUTABLE=$(which python) -DLIBSHIBOKEN_INCLUDE_DIRS=/usr/local/include/shiboken6",
+    PIP_EXTRA_INDEX_URL: "https://python-limereport.github.io/pypi/"
+}
