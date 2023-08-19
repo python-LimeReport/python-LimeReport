@@ -3,7 +3,6 @@ requires = [
     "cmake>=3.18",
     "setuptools>=42",
     "wheel",
-    "--extra-index-url=https://python-limereport.github.io/pypi/",
     "shiboken6==6.4.2",
     "PySide6==6.4.2",
 ]
