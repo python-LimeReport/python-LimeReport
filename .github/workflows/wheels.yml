@@ -8,11 +8,12 @@ env:
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
+    name: Build wheels on ${{ matrix.os }} (USE_ZINT = ${{ matrix.zint }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-20.04]
+        zint: [TRUE, FALSE]
 
     steps:
       - uses: actions/checkout@v3
@@ -25,7 +26,7 @@ jobs:
           CIBW_BUILD: "cp39-manylinux*"
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-6.4.2
-          # CIBW_ENVIRONMENT_ALL: "QT_VERSION=6.4.2 AQTINSTALL_VERSION=3.1.6"
+          CIBW_ENVIRONMENT: "LIMEREPORT_USE_ZINT=${{ matrix.zint }}"
 
       - uses: actions/upload-artifact@v3
         with:
