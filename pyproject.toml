@@ -11,6 +11,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
 before-all = "cibuildwheel/before_all.sh"
+before-build = "cibuildwheel/before_build.sh"
 build-verbosity = 1
 
 [tool.cibuildwheel.linux]
