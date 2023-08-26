@@ -48,7 +48,9 @@ jobs:
           CIBW_BUILD: "cp39-manylinux*"
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-6.4.2
-
+          CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
+              auditwheel show {wheel} && 
+              auditwheel repair -w {dest_dir} {wheel}
           CIBW_ENVIRONMENT: >
             CMAKE_BUILD_PARALLEL_LEVEL="$(nproc)"
             CMAKE_ARGS="-DPython3_EXECUTABLE=$(which python) -DLIBSHIBOKEN_INCLUDE_DIRS=/usr/local/include/shiboken6 -DPYSIDE_INSTALL_DIR=/usr/local"
