@@ -1,5 +1,5 @@
 libOpenGL.so.0
-libpyside6.so.6
+libpyside6.abi3.so.6
 libQt6Core.so.6
 libQt6DBus.so.6
 libQt6Gui.so.6
@@ -13,4 +13,4 @@ libQt6Svg.so.6
 libQt6UiTools.so.6
 libQt6Widgets.so.6
 libQt6Xml.so.6
-libshiboken6.so.6
+libshiboken6.abi3.so.6
