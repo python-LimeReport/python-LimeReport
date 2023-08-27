@@ -52,7 +52,7 @@ def qt_version_tuple():
     output = proc.stdout.read()
     return output.decode('utf-8').strip().split('.')
     
-qt_major = qt_version_tuple()[0]
+qt_major, qt_minor, qt_patch = qt_version_tuple()
 (p_major, p_minor, p_patchlevel) = platform.python_version_tuple()
 pyside_version = f"{(2 if qt_major == 5 else qt_major)}"
 
@@ -207,6 +207,6 @@ setup(
         "bdist_wheel": BDistWheel,
     },
     install_requires=[
-        f"PySide{pyside_version}"
+        f"PySide{pyside_version}=={qt_major}.{qt_minor}.*"
     ],
 )
