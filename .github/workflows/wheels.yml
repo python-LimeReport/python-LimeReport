@@ -49,7 +49,7 @@ jobs:
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-6.4.2
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
-              SCRIPT="{project}/cibuildwheel/auditwheel_repair_options.sh" eval $($SCRIPT) &&
+              eval $({package}/cibuildwheel/auditwheel_repair_options.sh) &&
               auditwheel show {wheel} && 
               auditwheel repair $AUDITWHEEL_REPAIR_OPTIONS -w {dest_dir} {wheel}
           CIBW_ENVIRONMENT: >
