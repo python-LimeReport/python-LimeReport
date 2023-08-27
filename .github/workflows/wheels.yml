@@ -59,6 +59,7 @@ jobs:
             CMAKE_ARGS="-DPython3_EXECUTABLE=$(which python) -DLIBSHIBOKEN_INCLUDE_DIRS=/usr/local/include/shiboken6 -DPYSIDE_INSTALL_DIR=/usr/local"
             PIP_EXTRA_INDEX_URL="https://python-limereport.github.io/pypi/"
             LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
+          CIBW_ENVIRONMENT_PASS_LINUX: AUDITWHEEL_REPAIR_OPTIONS
 
       - uses: actions/upload-artifact@v3
         with:
