@@ -42,9 +42,8 @@ jobs:
         with:
           submodules: true
 
-      - run: echo AUDITWHEEL_REPAIR_OPTIONS="$(cat ./cibuildwheel/exclude_list.txt | sed -e "s/.*/--exclude &/" | xargs)" >> "$GITHUB_ENV"
-      
-      - run: echo $AUDITWHEEL_REPAIR_OPTIONS
+      - name: Setup env variables
+        run: $GITHUB_WORKSPACE/.github/setup_wheels_env.sh
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.15.0
