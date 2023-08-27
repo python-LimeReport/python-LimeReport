@@ -10,12 +10,5 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
-before-build = "cibuildwheel/before_build.sh && eval $(cibuildwheel/auditwheel_repair_options.sh)"
+before-build = "cibuildwheel/before_build.sh && echo $AUDITWHEEL_REPAIR_OPTIONS"
 build-verbosity = 1
-
-[tool.cibuildwheel.linux]
-
-[tool.cibuildwheel.linux.environment]
-CMAKE_BUILD_PARALLEL_LEVEL = "$(nproc)"
-CMAKE_ARGS = "-DPython3_EXECUTABLE=$(which python) -DLIBSHIBOKEN_INCLUDE_DIRS=/usr/local/include/shiboken6 -DPYSIDE_INSTALL_DIR=/usr/local"
-PIP_EXTRA_INDEX_URL = "https://python-limereport.github.io/pypi/"
