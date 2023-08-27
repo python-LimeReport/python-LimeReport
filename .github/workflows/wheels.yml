@@ -30,11 +30,10 @@ jobs:
           path: dist/*.tar.gz
           
   build_wheels:
-    name: Build wheels on ${{ matrix.os }} (USE_ZINT = ${{ matrix.zint }})
-    runs-on: ${{ matrix.os }}
+    name: Build wheels on Linux (USE_ZINT = ${{ matrix.zint }})
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-20.04]
         zint: ["TRUE", "FALSE"]
 
     steps:
@@ -81,4 +80,4 @@ jobs:
 
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          repository_url: https://test.pypi.org/legacy/
+          repository-url: https://test.pypi.org/legacy/

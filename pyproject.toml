@@ -3,12 +3,12 @@ requires = [
     "cmake>=3.18",
     "setuptools>=42",
     "wheel",
-    "shiboken6==6.4.2",
-    "PySide6==6.4.2",
+    "shiboken6==6.4",
+    "PySide6==6.4",
 ]
 
 build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
-before-build = "cibuildwheel/before_build.sh && echo $AUDITWHEEL_REPAIR_OPTIONS"
+before-build = "cibuildwheel/before_build.sh"
 build-verbosity = 1
