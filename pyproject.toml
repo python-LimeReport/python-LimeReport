@@ -10,7 +10,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
-before-build = "cibuildwheel/before_build.sh"
+before-build = "cibuildwheel/before_build.sh && eval cibuildwheel/auditwheel_repair_options.sh"
 build-verbosity = 1
 
 [tool.cibuildwheel.linux]
