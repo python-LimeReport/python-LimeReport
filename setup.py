@@ -57,7 +57,7 @@ qt_major, qt_minor, qt_patch = qt_version_tuple()
 pyside_version = f"{(2 if qt_major == 5 else qt_major)}"
 
 def get_name():
-    n = f"LimeReport{pyside_version}"
+    n = f"LimeReport-qt{qt_major}-{qt_minor}"
 
     if USE_ZINT:
         return n + "-Z"
@@ -199,7 +199,7 @@ setup(
     license_files = get_license_files(),
     ext_modules=[
         CMakeExtension(
-            f"LimeReport{qt_major}"
+            f"LimeReport"
         )
     ],
     cmdclass={
@@ -207,6 +207,7 @@ setup(
         "bdist_wheel": BDistWheel,
     },
     install_requires=[
-        f"PySide{pyside_version}=={qt_major}.{qt_minor}.*"
+        f"PySide{pyside_version}=={qt_major}.{qt_minor}.*",
+        f"shiboken{pyside_version}=={qt_major}.{qt_minor}.*"
     ],
 )
