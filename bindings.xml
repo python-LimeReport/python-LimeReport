@@ -29,7 +29,7 @@ You should have received copies of the GNU General Public License and the
 GNU Lesser General Public License along with the python-LimeReport library. If not,
 see https://www.gnu.org/licenses/. 
 -->
-<typesystem package="LimeReport6">
+<typesystem package="LimeReport">
     <load-typesystem name="typesystem_widgets.xml" generate="no"/>
     <load-typesystem name="typesystem_qml.xml" generate="no"/>
     <load-typesystem name="typesystem_printsupport_common.xml" generate="no"/>
