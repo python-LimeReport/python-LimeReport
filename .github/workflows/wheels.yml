@@ -64,7 +64,7 @@ jobs:
         with:
           path: ./wheelhouse/*.whl
 
-  upload_pypi:
+  release:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     environment: pypi
@@ -79,6 +79,11 @@ jobs:
           # if `name: artifact` is omitted, the action will create extra parent dir
           name: artifact
           path: dist
+
+      - name: Github Release
+        uses: softprops/action-gh-release@v1
+        with:
+          prerelease: ${{ endsWith(github.ref, '.dev') }}
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
