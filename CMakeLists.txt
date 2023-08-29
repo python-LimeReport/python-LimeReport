@@ -126,7 +126,6 @@ set(${PROJECT_NAME}_sources ${generated_sources})
 
 add_library(${PROJECT_NAME} MODULE ${${PROJECT_NAME}_sources})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
-SET_TARGET_PROPERTIES
 
 target_link_libraries(${PROJECT_NAME} 
   limereport-qt${QT_VERSION_MAJOR} 
