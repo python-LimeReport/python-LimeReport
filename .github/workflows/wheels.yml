@@ -87,6 +87,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           prerelease: ${{ endsWith(github.ref, '.dev') }}
+          files: dist/*
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
