@@ -9,9 +9,13 @@ project(LimeReport)
 
 # LimeReport options
 set(USE_QT6 ON)
-set(ENABLE_ZINT OFF)
+if (NOT DEFINED ENABLE_ZINT)
+  set(ENABLE_ZINT OFF)
+endif()
 #
 set(LIMEREPORT_STATIC ON)
+
+message(ENABLE_ZINT, ${ENABLE_ZINT})
 
 if (NOT DEFINED PYSIDE_INSTALL_DIR)
     set(PYSIDE_INSTALL_DIR $ENV{PYSIDE_INSTALL_DIR})

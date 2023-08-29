@@ -122,7 +122,7 @@ class BuildExt(build_ext):
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}{os.sep}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
-            f"-DENABLE_ZINT={USE_ZINT}"
+            f"-DENABLE_ZINT={'ON' if USE_ZINT else 'OFF'}"
         ]
         build_args = []
         # Adding CMake arguments set as environment variable
