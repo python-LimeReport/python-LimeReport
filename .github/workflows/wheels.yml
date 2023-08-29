@@ -10,7 +10,7 @@ jobs:
     name: Build source distribution (Qt ${{ matrix.qt }} USE_ZINT = ${{ matrix.zint }})
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-${{ matrix.qt }
+      image: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-${{ matrix.qt }}
     strategy:
       matrix:
         zint: [TRUE, FALSE]
