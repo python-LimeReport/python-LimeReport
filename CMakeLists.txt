@@ -126,6 +126,7 @@ set(${PROJECT_NAME}_sources ${generated_sources})
 
 add_library(${PROJECT_NAME} MODULE ${${PROJECT_NAME}_sources})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+SET_TARGET_PROPERTIES
 
 target_link_libraries(${PROJECT_NAME} 
   limereport-qt${QT_VERSION_MAJOR} 
@@ -149,7 +150,7 @@ foreach(_dir IN LISTS PYSIDE_INCLUDE_DIRS)
   target_include_directories(${PROJECT_NAME} PRIVATE ${_dir}/QtPrintSupport)
 endforeach()
 
-set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH "$ORIGIN/:$ORIGIN/PySide6/:$ORIGIN/shiboken6/")
+set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH "$ORIGIN/PySide6/:$ORIGIN/shiboken6/:$ORIGIN/PySide6/:$ORIGIN/PySide6/Qt/lib/:$ORIGIN/")
 
 
 # ===============
