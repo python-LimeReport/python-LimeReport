@@ -5,7 +5,7 @@ if(POLICY CMP0068)
   cmake_policy(SET CMP0068 NEW)
 endif()
 
-project(LimeReport6)
+project(LimeReport)
 
 # LimeReport options
 set(USE_QT6 ON)
@@ -65,7 +65,7 @@ set(wrapped_header ${CMAKE_SOURCE_DIR}/bindings.h)
 set(typesystem_file ${CMAKE_SOURCE_DIR}/bindings.xml)
 
 set(generated_sources
-  limereport6_module_wrapper.cpp
+  limereport_module_wrapper.cpp
   limereport_enums_wrapper.cpp
   limereport_reportengine_wrapper.cpp
   limereport_icallbackdatasource_wrapper.cpp
