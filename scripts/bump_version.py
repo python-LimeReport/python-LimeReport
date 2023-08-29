@@ -127,7 +127,7 @@ def main():
     modify_version_setup_cfg(new_version)
     git("add", ".")
     git("commit", "-am", "chore: bump version")
-    git("tag", f"v{new_version}")
+    git("tag", "-am", f"New version: {new_version}", f"v{new_version}")
     
 
         
