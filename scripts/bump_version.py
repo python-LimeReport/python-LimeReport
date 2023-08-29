@@ -33,9 +33,10 @@ import subprocess
 import os
 import sys
 import fileinput
+import argparse
 
-current_dir = os.path.dirname(os.path.realpath(__file__))
-SETUP_CFG_PATH = os.path.join(current_dir, "../setup.cfg")
+CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
+SETUP_CFG_PATH = os.path.join(CURRENT_DIR, "../setup.cfg")
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -44,10 +45,14 @@ def git_o(*args):
     return subprocess.check_output(['git'] + list(args),  encoding='UTF-8').strip()
 
 def git(*args):
-    return subprocess.check_call(['git'] + list(args))
+    return subprocess.check_call(['git'] + list(args), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
-def get_last_tag():
-    return git_o("describe", "--tags", git_o("rev-list","--tags", "--max-count=1")).lstrip("v")
+def get_last_version_tag():
+    return git_o("describe", "--tags", "--match", "v*","--abbrev=0", git_o("rev-list","--tags", "--max-count=1"))
+
+def get_last_version_tag_upstream():
+    return git_o("describe", "--tags", git_o("rev-list","--tags", "--max-count=1"))
+
 
 def get_version_from_setup_cfg():
     with open(SETUP_CFG_PATH, encoding="utf-8") as f:
@@ -70,34 +75,52 @@ def bump_semver_suffix(suffix, type):
     release_number += 1
     return (type + str(release_number))
 
+def update_upstream():
+    git("submodule", "update", "--recursive", "--remote", "--force")
+    cwd = os.getcwd()
+    os.chdir(os.path.join(CURRENT_DIR, '../LimeReport'))
+    version = get_last_version_tag_upstream()
+    git('checkout', version)
+    os.chdir(cwd)
+
+    return version
+
 def main():
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('-u', '--update-upstream', dest='update_upstream', action='store_true')
+    
+    args = parser.parse_args()
+    
+    git("checkout", "master")
     git("fetch", "--all", "--tag")
-    last_tag = get_last_tag()
+
+    last_tag = get_last_version_tag().lstrip("v")
     version = get_version_from_setup_cfg()
     
     if last_tag != version:
         eprint(f"Last tag didn't match version ({last_tag} != {version})")
         sys.exit(1)
-    
-    print("Current version:", version)
 
-    parts = version.split(".")
-    if len(parts) == 3:
-        parts += ["post1"]
+    if args.update_upstream:
+        new_version = update_upstream() + ".dev1"
     else:
-        semver_suffix = parts[3]
-
-        if semver_suffix.startswith("post"):
-            semver_suffix = bump_semver_suffix(semver_suffix, "post")
-        elif semver_suffix.startswith("dev"):
-            semver_suffix = bump_semver_suffix(semver_suffix, "dev")
+        parts = version.split(".")
+        if len(parts) == 3:
+            parts += ["post1"]
         else:
-            eprint("Unknown version suffix")
-            sys.exit(2)
+            semver_suffix = parts[3]
 
-        parts[3] = semver_suffix
+            if semver_suffix.startswith("post"):
+                semver_suffix = bump_semver_suffix(semver_suffix, "post")
+            elif semver_suffix.startswith("dev"):
+                semver_suffix = bump_semver_suffix(semver_suffix, "dev")
+            else:
+                eprint("Unknown version suffix")
+                sys.exit(2)
 
-    new_version = ".".join(parts)
+            parts[3] = semver_suffix
+
+        new_version = ".".join(parts)
 
     print("New version:", new_version)
 
@@ -105,6 +128,8 @@ def main():
     git("add", ".")
     git("commit", "-am", "chore: bump version")
     git("tag", f"v{new_version}")
+    
+
         
 
 if __name__ == "__main__":
