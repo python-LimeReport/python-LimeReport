@@ -16,7 +16,8 @@ jobs:
         zint: [TRUE, FALSE]
         qt: [6.4.2]
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
           submodules: true
 
@@ -25,7 +26,8 @@ jobs:
         env:
           LIMEREPORT_USE_ZINT: ${{ matrix.zint }}
 
-      - uses: actions/upload-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
           path: dist/*.tar.gz
           
@@ -70,6 +72,7 @@ jobs:
     environment: pypi
     permissions:
       id-token: write
+      contents: write
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Download artifact
