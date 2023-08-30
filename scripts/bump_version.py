@@ -88,6 +88,7 @@ def update_upstream():
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('-u', '--update-upstream', dest='update_upstream', action='store_true')
+    parser.add_argument('-r', '--release', dest='release', action='store_true')
     
     args = parser.parse_args()
     
@@ -103,6 +104,8 @@ def main():
 
     if args.update_upstream:
         new_version = update_upstream() + ".dev1"
+    elif args.release:
+        new_version = ".".join(version.split(".")[:-1])
     else:
         parts = version.split(".")
         if len(parts) == 3:
