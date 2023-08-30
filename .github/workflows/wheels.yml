@@ -21,6 +21,10 @@ jobs:
         with:
           submodules: true
 
+      - name: Apply patches
+        working-directory: LimeReport
+        run: git apply ../patches/*.patch
+
       - name: Build sdist
         run: pipx run build --sdist
         env:
@@ -46,6 +50,10 @@ jobs:
 
       - name: Setup env variables
         run: $GITHUB_WORKSPACE/.github/setup_wheels_env.sh
+      
+      - name: Apply patches
+        working-directory: LimeReport
+        run: git apply ../patches/*.patch
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.15.0
