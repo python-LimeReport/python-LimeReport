@@ -67,6 +67,7 @@ jobs:
           path: ./wheelhouse/*.whl
 
   release:
+    name: Release
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     environment: pypi
@@ -91,5 +92,3 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
