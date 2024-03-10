@@ -36,7 +36,7 @@ jobs:
           path: dist/*.tar.gz
           
   build_wheels:
-    name: Build wheels on Linux (Qt ${{ matrix.qt }} USE_ZINT = ${{ matrix.zint }})
+    name: Build wheels on ${{ matrix.os }} (Qt ${{ matrix.qt }} USE_ZINT = ${{ matrix.zint }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -54,7 +54,7 @@ jobs:
         if: matrix.os == 'ubuntu-20.04'
 
       - name: Apply patches
-        working-directory: LimeReport
+        working-directory: ./LimeReport
         run: git apply ../patches/*.patch
 
       - name: Build wheels
