@@ -9,6 +9,6 @@ requires = [
 
 build-backend = "setuptools.build_meta"
 
-[tool.cibuildwheel]
+[tool.cibuildwheel.linux]
 before-build = "cibuildwheel/before_build.sh"
 build-verbosity = 1
