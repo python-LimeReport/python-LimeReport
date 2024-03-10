@@ -54,7 +54,9 @@ jobs:
         if: matrix.os == 'ubuntu-20.04'
 
       - name: Apply patches
-        run: cd LimeReport && git apply ../patches/*.patch
+        working-directory: LimeReport
+        run: git apply ../patches/*.patch
+        if: matrix.os == 'ubuntu-20.04'
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.15.0
