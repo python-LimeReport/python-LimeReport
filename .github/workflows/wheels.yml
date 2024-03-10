@@ -58,6 +58,11 @@ jobs:
         run: git apply ../patches/*.patch
         if: matrix.os == 'ubuntu-20.04'
 
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        version: ${{ matrix.qt }}
+        if: runner.os == 'Windows'
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.16.5
         env:
