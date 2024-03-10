@@ -62,6 +62,7 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           version: ${{ matrix.qt }}
+          cache: true
         if: runner.os == 'Windows'
 
       - name: Build wheels

@@ -29,14 +29,6 @@ find_package(
   COMPONENTS Core Widgets Sql Network Xml Svg Qml PrintSupport REQUIRED
 )
 
-if (NOT DEFINED LIBSHIBOKEN_INCLUDE_DIRS)
-  set(LIBSHIBOKEN_INCLUDE_DIRS $ENV{LIBSHIBOKEN_INCLUDE_DIRS})
-endif()
-
-if (NOT DEFINED LIBSHIBOKEN_LIBRARY)
-  set(LIBSHIBOKEN_LIBRARY $ENV{LIBSHIBOKEN_LIBRARY})
-endif()
-
 # Macro to get various pyside / python include / link flags and paths.
 # Uses the not entirely supported utils/pyside_config.py file.
 macro(pyside_config option output_var)
@@ -77,8 +69,7 @@ if(NOT EXISTS ${shiboken_path})
 endif()
 
 add_subdirectory(LimeReport)
-
-set(CMAKE_CXX_STANDARD 11)
+shiboken_shared_libraries
 
 set(wrapped_header ${CMAKE_SOURCE_DIR}/bindings.h)
 set(typesystem_file ${CMAKE_SOURCE_DIR}/bindings.xml)
@@ -149,14 +140,14 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} 
-  ${LIBSHIBOKEN_LIBRARY}
-  PySide6::pyside6
+  ${shiboken_shared_libraries}
+  ${pyside_shared_libraries}
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${PYTHON_INCLUDE_DIRS})
-target_include_directories(${PROJECT_NAME} PRIVATE ${LIBSHIBOKEN_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PRIVATE ${python_include_dir})
+target_include_directories(${PROJECT_NAME} PRIVATE ${shiboken_include_dir})
 
-foreach(_dir IN LISTS PYSIDE_INCLUDE_DIRS)
+foreach(_dir IN LISTS pyside_include_dir)
   target_include_directories(${PROJECT_NAME} PRIVATE ${_dir})
   target_include_directories(${PROJECT_NAME} PRIVATE ${_dir}/QtCore)
   target_include_directories(${PROJECT_NAME} PRIVATE ${_dir}/QtGui)
