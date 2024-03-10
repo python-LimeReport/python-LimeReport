@@ -69,7 +69,8 @@ if(NOT EXISTS ${shiboken_path})
 endif()
 
 add_subdirectory(LimeReport)
-shiboken_shared_libraries
+
+set(CMAKE_CXX_STANDARD 11)
 
 set(wrapped_header ${CMAKE_SOURCE_DIR}/bindings.h)
 set(typesystem_file ${CMAKE_SOURCE_DIR}/bindings.xml)
@@ -140,7 +141,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} 
-  ${shiboken_shared_libraries}
+  ${LIBSHIBOKEN_LIBRARY}
   ${pyside_shared_libraries}
 )
 
