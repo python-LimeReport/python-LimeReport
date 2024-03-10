@@ -17,6 +17,14 @@ set(LIMEREPORT_STATIC ON)
 
 message(ENABLE_ZINT, ${ENABLE_ZINT})
 
+# Find Python
+find_package (Python3 COMPONENTS Interpreter)
+if(NOT Python3_Interpreter_FOUND)
+    message(FATAL_ERROR "Python3 not found")
+endif()
+message(STATUS "Using python: ${Python3_EXECUTABLE}")
+
+
 if (NOT DEFINED PYSIDE_INSTALL_DIR)
     set(PYSIDE_INSTALL_DIR $ENV{PYSIDE_INSTALL_DIR})
 endif()
