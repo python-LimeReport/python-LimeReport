@@ -63,6 +63,7 @@ jobs:
         with:
           version: ${{ matrix.qt }}
           cache: true
+          setup-python: false
         if: runner.os == 'Windows'
 
       - name: Build wheels
