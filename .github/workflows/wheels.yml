@@ -3,7 +3,7 @@ name: Build
 on: [push, pull_request]
 
 env:
-  PIP_EXTRA_INDEX_URL: "https://python-limereport.github.io/pypi/"
+  PIP_EXTRA_INDEX_URL: "https://download.qt.io/official_releases/QtForPython"
 
 jobs:
   build_sdist:

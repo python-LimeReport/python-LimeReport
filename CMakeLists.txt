@@ -37,30 +37,43 @@ if (NOT DEFINED LIBSHIBOKEN_LIBRARY)
   set(LIBSHIBOKEN_LIBRARY $ENV{LIBSHIBOKEN_LIBRARY})
 endif()
 
-if (NOT DEFINED LIBSHIBOKEN_INCLUDE_DIRS)
-  find_package(Shiboken6 REQUIRED)
-  get_target_property(LIBSHIBOKEN_INCLUDE_DIRS Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
-  set(LIBSHIBOKEN_LIBRARY "Shiboken6::libshiboken")
-else()
-  if(NOT DEFINED Python3_INCLUDE_DIRS)
-    find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED)
-  endif()
+# Macro to get various pyside / python include / link flags and paths.
+# Uses the not entirely supported utils/pyside_config.py file.
+macro(pyside_config option output_var)
+    if(${ARGC} GREATER 2)
+        set(is_list ${ARGV2})
+    else()
+        set(is_list "")
+    endif()
 
-  set(PYTHON_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
-  set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
-endif()
+    execute_process(
+      COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/pyside_config.py"
+              ${option}
+      OUTPUT_VARIABLE ${output_var}
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-if (NOT DEFINED LIBSHIBOKEN_LIBRARY)
-  set(LIBSHIBOKEN_LIBRARY "shiboken6.abi3")
-endif()
+    if ("${${output_var}}" STREQUAL "")
+        message(FATAL_ERROR "Error: Calling ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/pyside_config.py ${option} returned no output.")
+    endif()
+    if(is_list)
+        string (REPLACE " " ";" ${output_var} "${${output_var}}")
+    endif()
+endmacro()
 
-if (NOT DEFINED PYSIDE_INCLUDE_DIRS)
-    set(PYSIDE_INCLUDE_DIRS $ENV{PYSIDE_INCLUDE_DIRS})
-endif()
+# Query for the shiboken generator path, Python path, include paths and linker flags.
+pyside_config(--shiboken-module-path shiboken_module_path)
+pyside_config(--shiboken-generator-path shiboken_generator_path)
+pyside_config(--pyside-path pyside_path)
+pyside_config(--pyside-include-path pyside_include_dir 1)
+pyside_config(--python-include-path python_include_dir)
+pyside_config(--shiboken-generator-include-path shiboken_include_dir 1)
+pyside_config(--shiboken-module-shared-libraries-cmake shiboken_shared_libraries 0)
+pyside_config(--python-link-flags-cmake python_linking_data 0)
+pyside_config(--pyside-shared-libraries-cmake pyside_shared_libraries 0)
 
-if (NOT DEFINED PYSIDE_INCLUDE_DIRS)
-  find_package(PySide6 REQUIRED)
-  get_target_property(PYSIDE_INCLUDE_DIRS PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
+set(shiboken_path "${shiboken_generator_path}/shiboken6${CMAKE_EXECUTABLE_SUFFIX}")
+if(NOT EXISTS ${shiboken_path})
+    message(FATAL_ERROR "Shiboken executable not found at path: ${shiboken_path}")
 endif()
 
 add_subdirectory(LimeReport)
@@ -96,13 +109,11 @@ list(TRANSFORM SHIBOKEN_INCLUDES PREPEND "-I")
 
 set(SHIBOKEN_TYPESYSTEMS
   ${CMAKE_SOURCE_DIR}
-  ${PYSIDE_TYPESYSTEMS}
+  ${pyside_path}/typesystems
 )
 list(REMOVE_DUPLICATES SHIBOKEN_TYPESYSTEMS)
 list(TRANSFORM SHIBOKEN_TYPESYSTEMS PREPEND "-T")
 
-
-set(shiboken_path "${PYSIDE_INSTALL_DIR}/bin/shiboken6")
 
 set(shiboken_options 
   --generator-set=shiboken 
