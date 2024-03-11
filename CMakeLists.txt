@@ -144,14 +144,9 @@ set(${PROJECT_NAME}_sources ${generated_sources})
 add_library(${PROJECT_NAME} MODULE ${${PROJECT_NAME}_sources})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
-target_link_libraries(${PROJECT_NAME} 
-  limereport-qt${QT_VERSION_MAJOR} 
-)
-
-target_link_libraries(${PROJECT_NAME} 
-  ${LIBSHIBOKEN_LIBRARY}
-  ${pyside_shared_libraries}
-)
+target_link_libraries(${PROJECT_NAME} limereport-qt${QT_VERSION_MAJOR})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${pyside_shared_libraries})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${shiboken_shared_libraries})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${python_include_dir})
 target_include_directories(${PROJECT_NAME} PRIVATE ${shiboken_include_dir})
@@ -168,20 +163,20 @@ endforeach()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH "$ORIGIN/PySide6/:$ORIGIN/shiboken6/:$ORIGIN/PySide6/:$ORIGIN/PySide6/Qt/lib/:$ORIGIN/")
 
-if(WIN32)
-    set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX ".pyd")
-endif()
-
-if(APPLE)
-  set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
-endif(APPLE)
-
-if (WIN32)
-    list(GET python_linking_data 0 python_libdir)
-    list(GET python_linking_data 1 python_lib)
-    find_library(python_link_flags ${python_lib} PATHS ${python_libdir} HINTS ${python_libdir})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${python_link_flags})
-endif()
+#if(WIN32)
+#    set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX ".pyd")
+#endif()
+#
+#if(APPLE)
+#  set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+#endif(APPLE)
+#
+#if (WIN32)
+#    list(GET python_linking_data 0 python_libdir)
+#    list(GET python_linking_data 1 python_lib)
+#    find_library(python_link_flags ${python_lib} PATHS ${python_libdir} HINTS ${python_libdir})
+#    target_link_libraries(${PROJECT_NAME} PRIVATE ${python_link_flags})
+#endif()
 
 
 # ===============
