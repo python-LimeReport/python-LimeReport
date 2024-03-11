@@ -168,6 +168,18 @@ endforeach()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH "$ORIGIN/PySide6/:$ORIGIN/shiboken6/:$ORIGIN/PySide6/:$ORIGIN/PySide6/Qt/lib/:$ORIGIN/")
 
+if(WIN32)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX ".pyd")
+endif()
+
+if(APPLE)
+  set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+endif(APPLE)
+
+if (WIN32)
+    list(GET python_linking_data 0 python_libdir)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${python_libdir})
+endif()
 
 # ===============
 
