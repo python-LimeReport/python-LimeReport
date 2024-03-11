@@ -78,7 +78,7 @@ jobs:
             LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
 
           CIBW_ENVIRONMENT_WINDOWS: >
-            CMAKE_ARGS="-DPython3_EXECUTABLE=$(which python)"
+            CMAKE_ARGS="-DPython3_EXECUTABLE=$(where python)"
 
           CIBW_ENVIRONMENT_LINUX: >
             CMAKE_BUILD_PARALLEL_LEVEL="$(nproc)"
