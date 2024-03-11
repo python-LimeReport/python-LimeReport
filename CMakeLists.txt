@@ -182,7 +182,7 @@ endif()
 # ===============
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${PYTHON_EXECUTABLE}
+                    COMMAND ${Python3_EXECUTABLE}
                     ${CMAKE_SOURCE_DIR}/build_scripts/pyi_generator.py
                     $<TARGET_FILE:${PROJECT_NAME}>
                     COMMENT "Running pyi_generator")
