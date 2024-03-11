@@ -144,7 +144,7 @@ set(${PROJECT_NAME}_sources ${generated_sources})
 add_library(${PROJECT_NAME} MODULE ${${PROJECT_NAME}_sources})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
-target_link_libraries(${PROJECT_NAME} limereport-qt${QT_VERSION_MAJOR})
+target_link_libraries(${PROJECT_NAME} PRIVATE limereport-qt${QT_VERSION_MAJOR})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${pyside_shared_libraries})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${shiboken_shared_libraries})
 
