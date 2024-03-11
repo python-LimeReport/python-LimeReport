@@ -178,8 +178,11 @@ endif(APPLE)
 
 if (WIN32)
     list(GET python_linking_data 0 python_libdir)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${python_libdir})
+    list(GET python_linking_data 1 python_lib)
+    find_library(python_link_flags ${python_lib} PATHS ${python_libdir} HINTS ${python_libdir})
+    target_link_libraries(${bindings_library} PRIVATE ${python_link_flags})
 endif()
+
 
 # ===============
 
