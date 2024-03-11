@@ -42,7 +42,7 @@ jobs:
       matrix:
         zint: ["TRUE", "FALSE"]
         qt: [6.4.2]
-        os: [windows-2019]
+        os: [ubuntu-20.04, windows-2019]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -50,13 +50,13 @@ jobs:
           submodules: true
 
       - name: Setup env variables
+        shell: bash
         run: $GITHUB_WORKSPACE/.github/setup_wheels_env.sh
-        if: matrix.os == 'ubuntu-20.04'
 
       - name: Apply patches
         working-directory: LimeReport
+        shell: bash
         run: git apply ../patches/*.patch
-        if: matrix.os == 'ubuntu-20.04'
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -71,14 +71,12 @@ jobs:
           CIBW_BUILD: "cp39-manylinux* cp39-win_amd64"
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-${{ matrix.qt }}
-          CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
+          CIBW_REPAIR_WHEEL_COMMAND: >
               auditwheel repair $AUDITWHEEL_REPAIR_OPTIONS -w {dest_dir} {wheel}
 
           CIBW_ENVIRONMENT: >
             LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
 
-          #CIBW_ENVIRONMENT_WINDOWS: >
-          #  CMAKE_ARGS="-DPython3_EXECUTABLE=$(where python)"
 
           CIBW_ENVIRONMENT_LINUX: >
             CMAKE_BUILD_PARALLEL_LEVEL="$(nproc)"
