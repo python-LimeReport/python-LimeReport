@@ -21,10 +21,12 @@ def main():
 		d = f.read()
 		
 	major, minor, patch = args.minver.split('.')
-
-	d = d.replace('libshiboken6.abi3.so.6.4', f'libshiboken6.abi3.so.{major}.{minor}')
-	d = d.replace('libpyside6.abi3.so.6.4', f'libpyside6.abi3.so.{major}.{minor}')
 	
+	libraries = ['libshiboken6.abi3.so', 'libpyside6.abi3.so', 'libpyside6qml.abi3.so']
+
+	for lib in libraries:
+	    d = d.replace(f'{lib}.6.4', f'{lib}.{major}.{minor}')
+
 	with open('cibuildwheel/exclude_list.txt', 'w', encoding='utf-8') as f:
 		f.write(d)
 
