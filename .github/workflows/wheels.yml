@@ -103,8 +103,6 @@ jobs:
                 mesa-libGL-devel \
                 pulseaudio-libs-glib2 \
                 dnf-plugins-core \
-            && yum config-manager --set-enabled powertools
-            && yum -y install ninja-build
             && yum clean all
             && rm -rf /var/cache/yum
             && python3 -m pip install --user aqtinstall==3.1.7
