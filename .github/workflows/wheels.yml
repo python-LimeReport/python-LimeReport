@@ -96,7 +96,7 @@ jobs:
 
 
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
-            pip install PySide6==${{ matrix.qt }} shiboken6==${{ matrix.qt }} \
+            pip install PySide6==${{ matrix.qt }} shiboken6==${{ matrix.qt }}
             && bash ./.github/repair_wheel.sh
 
           CIBW_BEFORE_BUILD_WINDOWS: >
