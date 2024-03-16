@@ -20,3 +20,4 @@ libQt6Xml.so.6
 libshiboken6.abi3.so.6.4
 libpyside6.abi3.so.6.4
 libpyside6qml.abi3.so.6.4
+libpyside6qml.abi3.so.6.5
