@@ -19,9 +19,8 @@ def main():
 
 	with open('cibuildwheel/exclude_list.txt', encoding='utf-8') as f:
 		d = f.read()
-	
-	# get major and minor from minver
-	major, minor = args.minver.split('.')
+		
+	major, minor, patch = args.minver.split('.')
 
 	d = d.replace('libshiboken6.abi3.so.6.4', f'"libshiboken6.abi.so.{major}.{minor}"')
 	d = d.replace('libpyside6.abi3.so.6.4', f'"libpyside6.abi.so.{major}.{minor}"')
