@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         zint: [TRUE, FALSE]
-        qt: [6.4.2]
+        qt: [6.4.2, 6.5.3, 6.6.2]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -89,6 +89,9 @@ jobs:
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
               auditwheel repair $AUDITWHEEL_REPAIR_OPTIONS -w {dest_dir} {wheel}
 
+          CIBW_BEFORE_BUILD_WINDOWS: >
+            python3 ./build_scripts/set-qt-constraint.py ${{ matrix.qt }}
+
           CIBW_BEFORE_BUILD_LINUX: >
             yum -y update
             && yum -y groupinstall "Development Tools"
@@ -108,7 +111,8 @@ jobs:
             && yum clean all
             && rm -rf /var/cache/yum
             && python3 -m pip install --user aqtinstall==3.1.7
-            && python3 -m aqt install-qt --outputdir /opt/Qt linux desktop ${{ matrix.qt }} 
+            && python3 -m aqt install-qt --outputdir /opt/Qt linux desktop ${{ matrix.qt }}
+            && python3 ./build_scripts/set-qt-constraint.py ${{ matrix.qt }}
           CIBW_ENVIRONMENT: >
             LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
 
