@@ -99,19 +99,20 @@ PLAT_TO_CMAKE = {
 }
 
 class CMakeExtension(Extension):
-    def __init__(self, name: str, sourcedir: str = "", py_limited_api = False) -> None:
+    def __init__(self, name: str, source_dir: str = "", write_top_level_init = None, py_limited_api = False) -> None:
         super().__init__(
             name=name, 
             sources=[],
             py_limited_api=py_limited_api,
         )
-        self.sourcedir = os.fspath(Path(sourcedir).resolve())
+        self.source_dir = os.fspath(Path(source_dir).resolve())
+        self.write_top_level_init = write_top_level_init
 
 class BuildExt(build_ext):
     def build_extension(self, ext: CMakeExtension) -> None:
         # Must be in this form due to bug in .resolve() only fixed in Python 3.10+
         ext_fullpath = Path.cwd() / self.get_ext_fullpath(ext.name)
-        extdir = ext_fullpath.parent.resolve()
+        extdir = ext_fullpath.parent.absolute()
 
 
         debug = int(os.environ.get("DEBUG", 0)) if self.debug is None else self.debug
@@ -178,11 +179,15 @@ class BuildExt(build_ext):
             build_temp.mkdir(parents=True)
 
         subprocess.run(
-            ["cmake", ext.sourcedir, *cmake_args], cwd=build_temp, check=True
+            ["cmake", ext.source_dir, *cmake_args], cwd=build_temp, check=True
         )
         subprocess.run(
             ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
         )
+
+        if ext.write_top_level_init is not None:
+            with open(file=Path(extdir) / "__init__.py", mode="w") as f:
+                f.write(ext.write_top_level_init)
 
 class BDistWheel(bdist_wheel):
     def finalize_options(self):
@@ -193,6 +198,8 @@ class BDistWheel(bdist_wheel):
 
         return super().finalize_options()
 
+init_py = Path("init.py").read_text()
+
 setup(
     name=get_name(),
     license = get_license(),
@@ -200,7 +207,10 @@ setup(
     license_files = get_license_files(),
     ext_modules=[
         CMakeExtension(
-            f"LimeReport"
+            name="LimeReport/LimeReport",
+            write_top_level_init=init_py,
+            source_dir=str(Path(__file__).parent.absolute()),
+            py_limited_api=True
         )
     ],
     cmdclass={
