@@ -110,14 +110,12 @@ endif()
 
 # ==================================== RPATH configuration ====================================
 
-set(CMAKE_SKIP_BUILD_RPATH TRUE)
-
 if(UNIX AND NOT APPLE)
-    set(CMAKE_INSTALL_RPATH "$ORIGIN/lib:$ORIGIN/../PySide6/:$ORIGIN/../PySide6/Qt/lib:$ORIGIN/../shiboken6")
+    set(CMAKE_BUILD_RPATH "$ORIGIN/lib:$ORIGIN/../PySide6/:$ORIGIN/../PySide6/Qt/lib:$ORIGIN/../shiboken6")
 endif()
 
 if(APPLE)
-    set(CMAKE_INSTALL_RPATH "@loader_path/lib;@loader_path/../PySide6/;@loader_path/../PySide6/Qt/lib;@loader_path/../shiboken6")
+    set(CMAKE_BUILD_RPATH "@loader_path/lib;@loader_path/../PySide6/;@loader_path/../PySide6/Qt/lib;@loader_path/../shiboken6")
     set(MACOSX_RPATH TRUE)
 endif()
 
