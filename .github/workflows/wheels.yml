@@ -71,7 +71,7 @@ jobs:
           CIBW_BUILD: "cp39-manylinux* cp39-win_amd64"
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-${{ matrix.qt }}
-          CIBW_REPAIR_WHEEL_COMMAND: >
+          CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
               auditwheel repair $AUDITWHEEL_REPAIR_OPTIONS -w {dest_dir} {wheel}
 
           CIBW_ENVIRONMENT: >
