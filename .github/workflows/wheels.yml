@@ -36,19 +36,20 @@ jobs:
           path: dist/*.tar.gz
           
   build_wheels:
-    name: Build wheels on ${{ matrix.os }} (Qt ${{ matrix.qt }} USE_ZINT = ${{ matrix.zint }})
+    name: Build wheels on ${{ matrix.os }} ${{ matrix.cibw_archs }} (Qt ${{ matrix.qt }} USE_ZINT = ${{ matrix.zint }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         zint: ["TRUE", "FALSE"]
         qt: [6.4.2]
+        os: [ubuntu-20.04, windows-latest]
         include:
           - os: ubuntu-20.04
             cibw_archs: "x86_64"
           - os: ubuntu-20.04
             cibw_archs: "aarch64"
-#          - os: windows-latest
-#            cibw_archs: "auto"
+          - os: windows-latest
+            cibw_archs: "auto"
     steps:
       - name: Set up QEMU
         if: matrix.cibw_archs == 'aarch64'
