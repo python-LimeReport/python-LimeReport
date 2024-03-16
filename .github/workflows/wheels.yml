@@ -106,7 +106,7 @@ jobs:
             && yum clean all
             && rm -rf /var/cache/yum
             && python3 -m pip install --user aqtinstall==3.1.7
-            && python3 -m qt install-qt --outputdir /opt/Qt linux desktop ${{ matrix.qt }} 
+            && python3 -m aqt install-qt --outputdir /opt/Qt linux desktop ${{ matrix.qt }} 
           CIBW_ENVIRONMENT: >
             LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
 
