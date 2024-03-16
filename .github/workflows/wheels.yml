@@ -96,7 +96,7 @@ jobs:
 
 
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
-              auditwheel repair $AUDITWHEEL_REPAIR_OPTIONS -w {dest_dir} {wheel}
+              auditwheel -v repair $AUDITWHEEL_REPAIR_OPTIONS -w {dest_dir} {wheel}
 
           CIBW_BEFORE_BUILD_WINDOWS: >
             python3 ./build_scripts/set-qt-constraint.py ${{ matrix.qt }}
