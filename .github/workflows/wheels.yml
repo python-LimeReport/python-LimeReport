@@ -43,15 +43,14 @@ jobs:
         zint: ["TRUE", "FALSE"]
         qt: [6.4.2]
         os: [ubuntu-20.04, windows-latest]
-        cibw_archs: ["auto"]
-        include:
-          - os: ubuntu-20.04
-            cibw_archs: "x86_64"
-          - os: ubuntu-20.04
-            cibw_archs: "aarch64"
+        cibw_archs: ["x86_64", "aarch64", "auto"]
         exclude:
           - os: ubuntu-20.04
             cibw_archs: "auto"
+          - os: windows-latest
+            cibw_archs: "x86_64"
+          - os: windows-latest
+            cibw_archs: "aarch64"
     steps:
       - name: Set up QEMU
         if: matrix.cibw_archs == 'aarch64'
