@@ -103,8 +103,17 @@ def main():
         sys.exit(1)
 
     if args.update_upstream:
-        new_version = update_upstream() + ".dev1"
+        upstream_version = update_upstream()
+        current_base_version = version.split('.')[0:3]  # Take only major.minor.patch
+        upstream_base_version = upstream_version.split('.')[0:3]  # Same here
+        if current_base_version == upstream_base_version:
+            eprint("No new version available upstream.")
+            sys.exit(3)
+        new_version = upstream_version + ".dev1"
     elif args.release:
+        if "post" in version:
+            eprint("Release cannot be made from a post-release version.")
+            sys.exit(4)
         new_version = ".".join(version.split(".")[:-1])
     else:
         parts = version.split(".")
