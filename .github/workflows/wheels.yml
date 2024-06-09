@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         zint: [TRUE, FALSE]
-        qt: [6.4.2, 6.5.3, 6.6.2]
+        qt: [6.4.2]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
