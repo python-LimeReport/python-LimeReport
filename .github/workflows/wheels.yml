@@ -86,7 +86,7 @@ jobs:
         if: runner.os == 'Windows'
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.16.5
+        uses: pypa/cibuildwheel@v2.18.1
         env:
           CIBW_BUILD: "cp39-manylinux* cp39-win_amd64"
           CIBW_ARCHS: "${{ matrix.cibw_archs }}"
@@ -113,6 +113,9 @@ jobs:
             CMAKE_BUILD_PARALLEL_LEVEL="$(nproc)"
             PATH=$PATH:/opt/Qt/${{ matrix.qt }}/bin
           CIBW_ENVIRONMENT_PASS_LINUX: AUDITWHEEL_REPAIR_OPTIONS PIP_EXTRA_INDEX_URL
+
+          # https://github.com/pypa/cibuildwheel/issues/1771
+          CIBW_CONTAINER_ENGINE: "${{ matrix.cibw_archs == 'aarch64' && 'docker; create_args: --platform linux/arm64/v8' || 'docker' }}"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
