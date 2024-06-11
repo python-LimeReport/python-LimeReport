@@ -103,7 +103,8 @@ jobs:
             python3 ./build_scripts/set-qt-constraint.py ${{ matrix.qt }}
 
           CIBW_BEFORE_BUILD_LINUX: >
-            python3 ./build_scripts/set-qt-constraint.py ${{ matrix.qt }}
+            bash ./.github/install_deps.sh
+            && python3 ./build_scripts/set-qt-constraint.py ${{ matrix.qt }}
           CIBW_ENVIRONMENT: >
             LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
 
