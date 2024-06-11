@@ -103,6 +103,7 @@ jobs:
             python3 ./build_scripts/set-qt-constraint.py ${{ matrix.qt }}
 
           CIBW_BEFORE_BUILD_LINUX: >
+            apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libxslt1.1 &&
             python3 ./build_scripts/set-qt-constraint.py ${{ matrix.qt }}
           CIBW_ENVIRONMENT: >
             LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
