@@ -13,6 +13,6 @@ for lib in "${LIBS_TO_EXCLUDE[@]}"; do
     BASE_AUDITWHEEL_REPAIR_OPTIONS+=" --exclude $lib"
 done
 
-sed -i "s/shiboken6==.*/shiboken6==$QT_VERSION/" $GITHUB_WORKSPACE/pyproject.toml
-sed -i "s/PySide6==.*/PySide6==$QT_VERSION/" $GITHUB_WORKSPACE/pyproject.toml
-sed -i "s/shiboken6_generator==.*/shiboken6_generator==$QT_VERSION/" $GITHUB_WORKSPACE/pyproject.toml
+sed -i "s/shiboken6==.*/shiboken6==$QT_VERSION\",/" $GITHUB_WORKSPACE/pyproject.toml
+sed -i "s/PySide6==.*/PySide6==$QT_VERSION\",/" $GITHUB_WORKSPACE/pyproject.toml
+sed -i "s/shiboken6_generator==.*/shiboken6_generator==$QT_VERSION\",/" $GITHUB_WORKSPACE/pyproject.toml
