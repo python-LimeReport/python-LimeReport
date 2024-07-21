@@ -79,7 +79,6 @@ jobs:
 
           CIBW_ENVIRONMENT_LINUX: >
             LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
-            LD_LIBRARY_PATH="/opt/Qt/${{ matrix.qt }}/gcc_64/lib"
             CMAKE_BUILD_PARALLEL_LEVEL="$(nproc)"
             CMAKE_ARGS="-DPython3_EXECUTABLE=$(which python) -DLIBSHIBOKEN_INCLUDE_DIRS=/usr/local/include/shiboken6 -DPYSIDE_INSTALL_DIR=/usr/local"
           CIBW_ENVIRONMENT_PASS_LINUX: AUDITWHEEL_REPAIR_OPTIONS PIP_EXTRA_INDEX_URL
