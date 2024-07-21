@@ -34,7 +34,7 @@ def download_file(url, save_path):
 
 def download_pyside_cgit_doc(doc_dir, qt_version):
     """Download specific documentation files."""
-    base_url = f"https://code.qt.io/cgit/pyside/pyside-setup.git/plain/sources/pyside6/PySide6/doc?h={qt_version}"
+    base_url = f"https://code.qt.io/cgit/pyside/pyside-setup.git/plain/sources/pyside6/PySide6/doc"
     files = [
         "qtqml_functions.rst",
         "qtquicktest.rst",
@@ -42,7 +42,7 @@ def download_pyside_cgit_doc(doc_dir, qt_version):
     ]
     
     for file in files:
-        url = f"{base_url}/{file}"
+        url = f"{base_url}/{file}?h={qt_version}"
         save_path = doc_dir / file
         download_file(url, save_path)
 
