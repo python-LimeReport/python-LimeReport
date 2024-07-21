@@ -21,6 +21,10 @@ jobs:
         with:
           submodules: true
 
+      - name: Setup env variables
+        shell: bash
+        run: $GITHUB_WORKSPACE/.github/setup_wheels_env.sh
+
       - name: Apply patches
         working-directory: LimeReport
         run: git apply ../patches/*.patch
