@@ -2,6 +2,8 @@
 
 BASE_AUDITWHEEL_REPAIR_OPTIONS="$(cat $GITHUB_WORKSPACE/cibuildwheel/exclude_list.txt | sed -e "s/.*/--exclude &/" | xargs)"
 
+QT_MAJOR_MINOR_VERSION=$(echo $QT_VERSION | cut -d. -f1-2)
+
 LIBS_TO_EXCLUDE=(
     "libshiboken6.abi3.so.$QT_MAJOR_MINOR_VERSION"
     "libpyside6.abi3.so.$QT_MAJOR_MINOR_VERSION"
