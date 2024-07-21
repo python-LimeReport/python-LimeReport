@@ -10,11 +10,11 @@ jobs:
     name: Build source distribution (Qt ${{ matrix.qt }} USE_ZINT = ${{ matrix.zint }})
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-${{ matrix.qt }}
+      image: ghcr.io/python-limereport/manylinux_2_28:qt-${{ matrix.qt }}
     strategy:
       matrix:
         zint: [TRUE, FALSE]
-        qt: [6.4.2]
+        qt: [6.4.2, 6.7.2]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -41,7 +41,7 @@ jobs:
     strategy:
       matrix:
         zint: ["TRUE", "FALSE"]
-        qt: [6.4.2]
+        qt: [6.4.2, 6.7.2]
         os: [ubuntu-20.04, windows-2019]
     steps:
       - name: Checkout repository
@@ -70,7 +70,7 @@ jobs:
         env:
           CIBW_BUILD: "cp39-manylinux* cp39-win_amd64"
           CIBW_ARCHS_LINUX: "x86_64"
-          CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-${{ matrix.qt }}
+          CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28:qt-${{ matrix.qt }}
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
               auditwheel repair $AUDITWHEEL_REPAIR_OPTIONS -w {dest_dir} {wheel}
 
