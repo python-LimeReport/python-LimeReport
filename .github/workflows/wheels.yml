@@ -24,6 +24,8 @@ jobs:
       - name: Setup env variables
         shell: bash
         run: $GITHUB_WORKSPACE/.github/setup_wheels_env.sh
+        env:
+          QT_VERSION: ${{ matrix.qt }}
 
       - name: Apply patches
         working-directory: LimeReport
@@ -56,6 +58,8 @@ jobs:
       - name: Setup env variables
         shell: bash
         run: $GITHUB_WORKSPACE/.github/setup_wheels_env.sh
+        env:
+          QT_VERSION: ${{ matrix.qt }}
 
       - name: Apply patches
         working-directory: LimeReport
