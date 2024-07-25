@@ -101,7 +101,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: artifact-whl-${{ matrix.qt }}-${{ matrix.zint }}
+          name: artifact-whl-${{ matrix.qt }}-${{ matrix.zint }}-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
   release:
@@ -120,7 +120,7 @@ jobs:
           path: dist
 
       - name: Github Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           prerelease: ${{ contains(github.ref, '.dev') }}
           files: dist/**/*
