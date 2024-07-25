@@ -39,6 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
+          name: artifact-sdist-${{ matrix.qt }}-${{ matrix.zint }}
           path: dist/*.tar.gz
           
   build_wheels:
@@ -100,6 +101,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
+          name: artifact-whl-${{ matrix.qt }}-${{ matrix.zint }}
           path: ./wheelhouse/*.whl
 
   release:
@@ -112,19 +114,16 @@ jobs:
       contents: write
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          # unpacks default artifact into dist/
-          # if `name: artifact` is omitted, the action will create extra parent dir
-          name: artifact
           path: dist
 
       - name: Github Release
         uses: softprops/action-gh-release@v1
         with:
           prerelease: ${{ contains(github.ref, '.dev') }}
-          files: dist/*
+          files: dist/**/*
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
