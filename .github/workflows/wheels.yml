@@ -118,12 +118,22 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: dist
+      
+      - name: Display structure of downloaded files
+        run: ls -R dist/
+
+      - name: Move files to dist directory
+        run: |
+          mkdir -p dist_final
+          find dist -type f \( -name "*.whl" -o -name "*.tar.gz" \) -exec mv {} dist_final/ \;
 
       - name: Github Release
         uses: softprops/action-gh-release@v2
         with:
           prerelease: ${{ contains(github.ref, '.dev') }}
-          files: dist/**/*
+          files: dist_final/**/*
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist_final/
