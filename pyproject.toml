@@ -3,6 +3,7 @@ requires = [
     "cmake>=3.18",
     "setuptools>=42",
     "wheel",
+    "packaging",
     "shiboken6==6.4.2",
     "PySide6==6.4.2",
     "shiboken6_generator==6.4.2",

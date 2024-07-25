@@ -27,17 +27,23 @@
 #  see https://www.gnu.org/licenses/. 
 #  
 
+import importlib
 import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 import platform
+import tempfile
 
+import PySide6
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
 from wheel.bdist_wheel import bdist_wheel
+
+from packaging import version
 
 import shiboken6
 
@@ -109,6 +115,34 @@ class CMakeExtension(Extension):
         self.write_top_level_init = write_top_level_init
 
 class BuildExt(build_ext):
+    def run(self):
+        pyside_version = PySide6.__version__
+        if version.parse(pyside_version) >= version.parse("6.7.0"):
+            self.clone_and_copy_pyside_docs(pyside_version)
+
+    def clone_and_copy_pyside_docs(self, pyside_version):
+        repo_url = "https://code.qt.io/pyside/pyside-setup.git"
+        branch = f"v{pyside_version}"
+        pyside_path = Path(importlib.util.find_spec("PySide6").origin).parent
+        target_dir = pyside_path / "doc"
+        target_dir.mkdir(exist_ok=True)
+
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            print(f"Cloning PySide repository (branch {branch}) to {tmpdirname}...")
+            try:
+                subprocess.run(["git", "clone", "-b", branch, "--depth", "1", repo_url, tmpdirname], check=True)
+            except subprocess.CalledProcessError:
+                print(f"Warning: Branch {branch} not found. Falling back to main branch.")
+                subprocess.run(["git", "clone", "--depth", "1", repo_url, tmpdirname], check=True)
+
+            source_dir = Path(tmpdirname) / "sources" / "pyside6" / "PySide6" / "doc"
+            print(f"Copying doc files from {source_dir} to {target_dir}")
+            for item in source_dir.glob('*'):
+                if item.is_file():
+                    shutil.copy2(item, target_dir)
+
+        print("Doc files copied successfully")
+
     def build_extension(self, ext: CMakeExtension) -> None:
         # Must be in this form due to bug in .resolve() only fixed in Python 3.10+
         ext_fullpath = Path.cwd() / self.get_ext_fullpath(ext.name)
