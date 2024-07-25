@@ -10,16 +10,22 @@ jobs:
     name: Build source distribution (Qt ${{ matrix.qt }} USE_ZINT = ${{ matrix.zint }})
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-${{ matrix.qt }}
+      image: ghcr.io/python-limereport/manylinux_2_28:qt-${{ matrix.qt }}
     strategy:
       matrix:
         zint: [TRUE, FALSE]
-        qt: [6.4.2]
+        qt: [6.4.2, 6.7.2]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
+
+      - name: Setup env variables
+        shell: bash
+        run: $GITHUB_WORKSPACE/.github/setup_wheels_env.sh
+        env:
+          QT_VERSION: ${{ matrix.qt }}
 
       - name: Apply patches
         working-directory: LimeReport
@@ -31,8 +37,9 @@ jobs:
           LIMEREPORT_USE_ZINT: ${{ matrix.zint }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: artifact-sdist-${{ matrix.qt }}-${{ matrix.zint }}
           path: dist/*.tar.gz
           
   build_wheels:
@@ -41,17 +48,19 @@ jobs:
     strategy:
       matrix:
         zint: ["TRUE", "FALSE"]
-        qt: [6.4.2]
+        qt: [6.4.2, 6.7.2]
         os: [ubuntu-20.04, windows-2019]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
 
       - name: Setup env variables
         shell: bash
         run: $GITHUB_WORKSPACE/.github/setup_wheels_env.sh
+        env:
+          QT_VERSION: ${{ matrix.qt }}
 
       - name: Apply patches
         working-directory: LimeReport
@@ -70,7 +79,7 @@ jobs:
         env:
           CIBW_BUILD: "cp39-manylinux* cp39-win_amd64"
           CIBW_ARCHS_LINUX: "x86_64"
-          CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28_x86_64:qt-${{ matrix.qt }}
+          CIBW_MANYLINUX_X86_64_IMAGE: ghcr.io/python-limereport/manylinux_2_28:qt-${{ matrix.qt }}
           CIBW_REPAIR_WHEEL_COMMAND_LINUX: >
               auditwheel repair $AUDITWHEEL_REPAIR_OPTIONS -w {dest_dir} {wheel}
 
@@ -79,14 +88,20 @@ jobs:
 
           CIBW_ENVIRONMENT_LINUX: >
             LIMEREPORT_USE_ZINT="${{ matrix.zint }}"
-            LD_LIBRARY_PATH="/opt/Qt/${{ matrix.qt }}/gcc_64/lib"
             CMAKE_BUILD_PARALLEL_LEVEL="$(nproc)"
             CMAKE_ARGS="-DPython3_EXECUTABLE=$(which python) -DLIBSHIBOKEN_INCLUDE_DIRS=/usr/local/include/shiboken6 -DPYSIDE_INSTALL_DIR=/usr/local"
           CIBW_ENVIRONMENT_PASS_LINUX: AUDITWHEEL_REPAIR_OPTIONS PIP_EXTRA_INDEX_URL
 
+          CIBW_BEFORE_BUILD: >
+            python -m pip install pip-tools &&
+            pip-compile pyproject.toml &&
+            pip install -r requirements.txt &&
+            python cibuildwheel/before_build.py
+
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: artifact-whl-${{ matrix.qt }}-${{ matrix.zint }}-${{ matrix.os }}
           path: ./wheelhouse/*.whl
 
   release:
@@ -99,19 +114,16 @@ jobs:
       contents: write
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          # unpacks default artifact into dist/
-          # if `name: artifact` is omitted, the action will create extra parent dir
-          name: artifact
           path: dist
 
       - name: Github Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           prerelease: ${{ contains(github.ref, '.dev') }}
-          files: dist/*
+          files: dist/**/*
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

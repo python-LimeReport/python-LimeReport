@@ -1,10 +1,6 @@
 libGLdispatch.so.0
 libGLX.so.0
-libicudata.so.56
-libicudata.so.56
-libicuuc.so.56
 libOpenGL.so.0
-libpyside6.abi3.so.6.4
 libQt6Core.so.6
 libQt6DBus.so.6
 libQt6Gui.so.6
@@ -18,4 +14,3 @@ libQt6Svg.so.6
 libQt6UiTools.so.6
 libQt6Widgets.so.6
 libQt6Xml.so.6
-libshiboken6.abi3.so.6.4

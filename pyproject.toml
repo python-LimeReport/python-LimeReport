@@ -3,6 +3,7 @@ requires = [
     "cmake>=3.18",
     "setuptools>=42",
     "wheel",
+    "packaging",
     "shiboken6==6.4.2",
     "PySide6==6.4.2",
     "shiboken6_generator==6.4.2",
@@ -11,5 +12,4 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel.linux]
-before-build = "cibuildwheel/before_build.sh"
 build-verbosity = 1
