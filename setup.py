@@ -119,6 +119,7 @@ class BuildExt(build_ext):
         pyside_version = PySide6.__version__
         if version.parse(pyside_version) >= version.parse("6.7.0"):
             self.clone_and_copy_pyside_docs(pyside_version)
+        super().run()
 
     def clone_and_copy_pyside_docs(self, pyside_version):
         repo_url = "https://code.qt.io/pyside/pyside-setup.git"
